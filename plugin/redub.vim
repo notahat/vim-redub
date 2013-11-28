@@ -1,4 +1,4 @@
-" Vim plugin to rename files.
+" Vim plugin to move and rename files.
 " Author: Pete Yandell <pete@notahat.com>
 
 let s:save_cpo = &cpo
@@ -9,10 +9,9 @@ if exists("g:loaded_redub") || &cp
 endif
 let g:loaded_redub = 1
 
-command! -nargs=1 -complete=file RenameBuffer call s:rename_buffer(<f-args>)
-command! -nargs=* -complete=file RenameFile call s:rename_file(<f-args>)
+command! -nargs=* -complete=file Redub call s:redub(<f-args>)
 
-function! s:rename_buffer(new_name)
+function! s:redub_buffer(new_name)
   " Make sure errors halt execution.
   try
     let existing_name = bufname("%")
@@ -26,9 +25,9 @@ function! s:rename_buffer(new_name)
   endtry
 endfunction
 
-" A smart file rename that that handles renaming any open buffers associated
+" A smart file move that that handles renaming any open buffers associated
 " with the file.
-function! s:rename_file(old_name, new_name)
+function! s:redub_file(old_name, new_name)
   " Expand the fie names to full paths.
   let l:old_name = fnamemodify(a:old_name, ":p")
   let l:new_name = fnamemodify(a:new_name, ":p")
@@ -43,9 +42,17 @@ function! s:rename_file(old_name, new_name)
     " Switch to the file's buffer, rename it, then switch back.
     let l:old_buffer_number = bufnr("%")
     exec "silent keepalt buffer " . l:buffer_number
-    call s:rename_buffer(a:new_name)
+    call s:redub_buffer(a:new_name)
     exec "silent keepalt buffer " . l:old_buffer_number
   endif
+endfunction
+
+function! s:redub(...)
+  if a:0 == 1
+    call s:redub_buffer(a:1)
+  elseif a:0 == 2
+    call s:redub_file(a:1, a:2)
+  end
 endfunction
 
 let &cpo = s:save_cpo
