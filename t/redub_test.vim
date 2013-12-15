@@ -21,6 +21,16 @@ describe 'Redub'
     Expect readfile("tmp/bar.txt") == ["Hello, world!"]
   end
 
+  it 'renames the current buffer given just a target filename'
+    new
+    normal iHello, world!
+    write tmp/foo.txt
+    Redub bar.txt
+
+    Expect filereadable("tmp/foo.txt") to_be_false
+    Expect readfile("tmp/bar.txt") == ["Hello, world!"]
+  end
+
   it 'renames a file on disk'
     call writefile(["Hello, world!"], "tmp/foo.txt")
     Redub tmp/foo.txt tmp/bar.txt
