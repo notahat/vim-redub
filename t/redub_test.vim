@@ -13,11 +13,15 @@ function CleanOutTmp()
     call mkdir("tmp")
   endif
 
-  " !rm tmp/*
+  !rm tmp/*
 
-  for l:file_name in glob("./tmp/*", 1, 1)
-    call delete(l:file_name)
-  end
+  " Note: I would have preferred the following code to shelling out on the
+  " line above, but for some reason the glob fails to find the files on
+  " Travis. I'd love to know why.
+  "
+  " for l:file_name in glob("./tmp/*", 1, 1)
+  "   call delete(l:file_name)
+  " end
 endfunction
 
 function InsertText(text)
