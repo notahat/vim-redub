@@ -13,11 +13,11 @@ function CleanOutTmp()
     call mkdir("tmp")
   endif
 
-  !rm tmp/*
+  " !rm tmp/*
 
-  " for l:file_name in glob("tmp/*", 1, 1)
-  "   call delete(l:file_name)
-  " end
+  for l:file_name in glob("./tmp/*", 1, 1)
+    call delete(l:file_name)
+  end
 endfunction
 
 function InsertText(text)
